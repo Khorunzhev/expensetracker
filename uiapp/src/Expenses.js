@@ -6,16 +6,24 @@ import "react-datepicker/dist/react-datepicker.css"
 import {Link} from "react-router-dom";
 import {Container, FormGroup, Form, Button, Input, Label} from "reactstrap";
 import AppNav from "./AppNav";
+import Moment from "react-moment";
 
 class Expenses extends Component {
+
+    emptyItem = {
+        id: '103',
+        expenseDate: new Date(),
+        description: '',
+        location: '',
+        categories: [1, 'Drugs']
+    }
+
     state = {
         date: new Date(),
         isLoading: true,
-        expenses: [],
-        Categories: []
+        Categories: [],
+        item: this.emptyItem
     }
-    handleChange
-    handleSubmit
 
     async componentDidMount() {
         const response = await fetch("/api/categories")
