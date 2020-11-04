@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.Instant;
 
@@ -22,6 +23,12 @@ public class Expense {
     private Instant expenseDate;
 
     private String description;
+
+    @ManyToOne
+    private Category category;
+
+    @ManyToOne
+    private User user;
 
 
 }
