@@ -11,7 +11,7 @@ import Moment from "react-moment";
 class Expenses extends Component {
 
     emptyItem = {
-        id: '103',
+        id: '',
         expenseDate: new Date(),
         description: '',
         location: '',
@@ -31,14 +31,14 @@ class Expenses extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleCategoryChange = this.handleCategoryChange.bind(this);
     }
 
     async handleSubmit(event) {
-        event.preventDefault();
 
         const item = this.state.item;
 
-        await fetch(`api/expenses/`, {
+        await fetch(`/api/expense/`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -46,6 +46,7 @@ class Expenses extends Component {
             },
             body: JSON.stringify(item),
         })
+        event.preventDefault();
         this.props.history.push("/expenses")
     }
 
@@ -64,6 +65,18 @@ class Expenses extends Component {
         item.expenseDate = date;
         this.setState({item})
         console.log(item)
+    }
+
+    async handleCategoryChange(event) {
+        let index = event.nativeEvent.target.selectedIndex;
+        let selectedOptionText = event.nativeEvent.target[index].text
+        let category = {
+            id: event.target.value,
+            name: selectedOptionText
+        }
+        let item = {...this.state.item};
+        item['category'] = category
+        this.setState({item})
     }
 
     async remove(id) {
@@ -102,7 +115,7 @@ class Expenses extends Component {
             return (<div>Loading...</div>)
 
         let optionList = Categories.map(category =>
-            <option value = {category.id} key={category.id}>
+            <option value = {category.id} key={category.id} name={category.name}>
                 {category.name}
             </option>
         )
@@ -124,18 +137,16 @@ class Expenses extends Component {
                         {title}
                         <Form onSubmit={this.handleSubmit}>
                             <FormGroup>
-                                <Label for="title">Title</Label>
-                                <Input type="text" name='title' id="title"
+                                <Label for="title">Description</Label>
+                                <Input type="text" name='description' id="description"
                                        onChange={this.handleChange}></Input>
                             </FormGroup>
 
                             <FormGroup>
                                 <Label for="category">Category</Label>
-                                <select>
+                                <select onChange={this.handleCategoryChange} name="category">
                                     {optionList}
                                 </select>
-                                <Input type="text" name='category' id="category"
-                                       onChange={this.handleChange}></Input>
                             </FormGroup>
 
                             <FormGroup>
