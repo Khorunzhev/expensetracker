@@ -12,6 +12,7 @@ class Expenses extends Component {
 
     emptyItem = {
         id: '',
+        amount: '',
         expenseDate: new Date(),
         description: '',
         location: '',
@@ -124,6 +125,7 @@ class Expenses extends Component {
             Expenses.map(exp =>
                 <tr key={exp.id}>
                     <td>{exp.description}</td>
+                    <td>{exp.amount}</td>
                     <td>{exp.location}</td>
                     <td><Moment date={exp.expenseDate} format="YYYY/MM/DD"/></td>
                     <td>{exp.category.name}</td>
@@ -139,6 +141,12 @@ class Expenses extends Component {
                             <FormGroup>
                                 <Label for="title">Description</Label>
                                 <Input type="text" name='description' id="description"
+                                       onChange={this.handleChange}></Input>
+                            </FormGroup>
+
+                            <FormGroup>
+                                <Label for="amount">Amount</Label>
+                                <Input type="text" name='amount' id="amount"
                                        onChange={this.handleChange}></Input>
                             </FormGroup>
 
@@ -173,6 +181,7 @@ class Expenses extends Component {
                             <thead>
                                 <tr>
                                     <th width="20%">Description</th>
+                                    <th width="10%">Amount</th>
                                     <th width="10%">Location</th>
                                     <th>Date</th>
                                     <th>Category</th>
