@@ -40,7 +40,10 @@ public class ExpenseController {
     }
 
     @PostMapping("/expense")
-    ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) throws URISyntaxException {
+    ResponseEntity<Expense> createExpense(@RequestHeader("Authorization-UserName") String userName, @Valid @RequestBody Expense expense) throws URISyntaxException {
+        User user = userRepository.findByLogin(userName);
+        expense.setUser(user);
+
         Expense result = expenseRepository.save(expense);
         return ResponseEntity.created(new URI(String.format("api/expense/%d", result.getId()))).body(result);
     }
