@@ -1,6 +1,6 @@
-insert into user values (1,'Patriot', 'patriot@patriot.com')
-insert into user values (2,'Starlight', 'starlight@Starlight.com')
-insert into user values (3,'Express', 'express@adam.com')
+insert into user (id, login, email) values (1,'Homelander', 'patriot@patriot.com')
+insert into user (id, login, email) values (2,'Starlight', 'starlight@Starlight.com')
+insert into user (id, login, email) values (3,'Express', 'express@adam.com')
 
 
 insert into category values (1,'Drugs')
