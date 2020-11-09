@@ -35,6 +35,7 @@ class Expenses extends Component {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleListDateChange = this.handleListDateChange.bind(this);
+        this.modify = this.modify.bind(this);
     }
 
     async handleSubmit(event) {
@@ -100,6 +101,21 @@ class Expenses extends Component {
         )
     }
 
+    async modify(expense) {
+        let modifyItem = {
+            id: expense.id,
+            amount: expense.amount,
+            description: expense.description,
+            location: expense.location,
+            category: expense.category,
+            expenseDate: new Date(),
+        }
+        console.log(modifyItem);
+        this.setState(
+            {item: modifyItem}
+        );
+    }
+
     async componentDidMount() {
         const response = await fetch("/api/categories")
         const body = await response.json();
@@ -137,6 +153,7 @@ class Expenses extends Component {
                     <td>{exp.location}</td>
                     <td><Moment date={exp.expenseDate} format="YYYY/MM/DD"/></td>
                     <td>{exp.category.name}</td>
+                    <td><Button size="sm" color="warning" onClick={() => this.modify(exp)}>Modify</Button></td>
                     <td><Button size="sm" color="danger" onClick={() => this.remove(exp.id)}>Delete</Button></td>
                 </tr>
             )
@@ -148,31 +165,31 @@ class Expenses extends Component {
                         <Form onSubmit={this.handleSubmit}>
                             <FormGroup>
                                 <Label for="title">Description</Label>
-                                <Input type="text" name='description' id="description"
+                                <Input type="text" name='description' id="description" value={this.state.item.description}
                                        onChange={this.handleChange}></Input>
                             </FormGroup>
 
                             <FormGroup>
                                 <Label for="amount">Amount</Label>
-                                <Input type="text" name='amount' id="amount"
+                                <Input type="text" name='amount' id="amount" value={this.state.item.amount}
                                        onChange={this.handleChange}></Input>
                             </FormGroup>
 
                             <FormGroup>
                                 <Label for="category">Category</Label>
-                                <select onChange={this.handleCategoryChange} name="category">
+                                <select onChange={this.handleCategoryChange} name="category" value={this.state.item.category}>
                                     {optionList}
                                 </select>
                             </FormGroup>
 
                             <FormGroup>
                                 <Label for="expenseDate">Expense Date</Label>
-                                <DatePicker selected={this.state.item.expenseDate} onChange={this.handleDateChange}/>
+                                <DatePicker selected={this.state.item.expenseDate} onChange={this.handleDateChange} value={this.state.item.expenseDate}/>
                             </FormGroup>
 
                             <FormGroup>
                                 <Label for="location">Location</Label>
-                                <Input type="text" name='location' id="location"
+                                <Input type="text" name='location' id="location" value={this.state.item.location}
                                        onChange={this.handleChange}></Input>
                             </FormGroup>
 
@@ -180,6 +197,7 @@ class Expenses extends Component {
                                 <Button color="primary" type="submit">Save</Button>{' '}
                                 <Button color="secondary" tag={Link} to="/categories">Cancel</Button>
                             </FormGroup>
+
                         </Form>
                     </Container>
                 {''}
@@ -194,7 +212,8 @@ class Expenses extends Component {
                                     <th width="10%">Location</th>
                                     <th>Date</th>
                                     <th>Category</th>
-                                    <th width="10%">Action</th>
+                                    <th width="10%">Modify</th>
+                                    <th width="10%">Delete</th>
                                 </tr>
                             </thead>
                             <tbody>
