@@ -19,8 +19,6 @@ class LoginComponent extends Component {
     }
 
     handleChange(event) {
-        console.log(this.state)
-        console.log(event.target.name)
         this.setState(
             {
                 [event.target.name]
@@ -30,27 +28,12 @@ class LoginComponent extends Component {
     }
 
     loginClicked() {
-        AuthentificationService
-            .executeBasicAuthentificationService(this.state.username, this.state.password)
-            .then(
-                () => {
-                    AuthentificationService.registerSuccessfulLogin(this.state.username, this.state.password)
-                    this.props.history.push(`/welcome/${this.state.username}`)
-                    this.setState(
-                        {
-                            showSuccessMessage:true,
-                            hasLoginFailed:false
-                        }
-                    )
-                }
-            ).catch(
-            () => {
-                this.setState(
-                    {
-                        showSuccessMessage:false,
-                        hasLoginFailed:true
-                    }
-                )
+        AuthentificationService.registerSuccessfulLogin(this.state.username, this.state.password)
+        this.props.history.push(`/expenses/`)
+        this.setState(
+            {
+                showSuccessMessage: true,
+                hasLoginFailed: false
             }
         )
     }

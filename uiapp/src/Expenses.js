@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import {Container, FormGroup, Form, Button, Input, Label, Table} from "reactstrap";
 import AppNav from "./AppNav";
 import Moment from "react-moment";
+import AuthentificationService from "./AuthentificationService";
 
 class Expenses extends Component {
 
@@ -104,7 +105,12 @@ class Expenses extends Component {
         const body = await response.json();
         this.setState({Categories: body, isLoading: false})
 
-        const responseExpenses = await fetch("/api/expenses")
+        const responseExpenses = await fetch("/api/expenses", {
+            method: 'GET',
+            headers: {
+                'Authorization-UserName': AuthentificationService.getLoggedInUserName()
+            }
+        })
         const bodyExpenses = await responseExpenses.json();
         this.setState({Expenses: bodyExpenses, isLoading: false})
     }

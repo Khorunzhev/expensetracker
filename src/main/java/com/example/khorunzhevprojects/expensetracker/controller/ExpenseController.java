@@ -26,13 +26,13 @@ public class ExpenseController {
     private UserRepository userRepository;
 
 
-    @GetMapping("/users/{login}/expenses")
-    Collection<Expense> getExpenses(@PathVariable String login) {
-        User user = userRepository.findByLogin(login);
+    @GetMapping("/expenses")
+    Collection<Expense> getExpenses(@RequestHeader("Authorization-UserName") String userName) {
+        User user = userRepository.findByLogin(userName);
         return  expenseRepository.findAllByUser(user);
     }
 
-    @GetMapping("expense/{id}")
+    @GetMapping("/expense/{id}")
     ResponseEntity<Expense> getExpense(@PathVariable Long id) {
         Optional<Expense> expense = expenseRepository.findById(id);
         return expense.map(response -> ResponseEntity.ok().body(response))
