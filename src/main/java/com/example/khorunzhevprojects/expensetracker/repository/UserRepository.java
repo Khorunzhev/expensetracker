@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ExpenseRepository extends JpaRepository<Expense, Long> {
-    List<Expense> findAllByUser(User user);
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByLogin(String login);
 }

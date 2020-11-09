@@ -33,6 +33,7 @@ class Expenses extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
+        this.handleListDateChange = this.handleListDateChange.bind(this);
     }
 
     async handleSubmit(event) {
@@ -58,14 +59,15 @@ class Expenses extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item})
-        console.log(this.state.item)
     }
 
     async handleDateChange(date) {
         let item = {...this.state.item};
         item.expenseDate = date;
         this.setState({item})
-        console.log(item)
+    }
+
+    async handleListDateChange(event) {
     }
 
     async handleCategoryChange(event) {
@@ -177,6 +179,7 @@ class Expenses extends Component {
                 {''}
                     <Container>
                         <h3>Expense List</h3>
+                        <DatePicker selected={this.state.item.expenseDate} onChange={this.handleListDateChange}/>
                         <Table className="mt-4">
                             <thead>
                                 <tr>

@@ -1,8 +1,10 @@
 package com.example.khorunzhevprojects.expensetracker.controller;
 
 import com.example.khorunzhevprojects.expensetracker.model.Expense;
+import com.example.khorunzhevprojects.expensetracker.model.User;
 import com.example.khorunzhevprojects.expensetracker.repository.ExpenseRepository;
 import com.example.khorunzhevprojects.expensetracker.repository.ExpenseRepository;
+import com.example.khorunzhevprojects.expensetracker.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +22,14 @@ public class ExpenseController {
 
     @Autowired
     private ExpenseRepository expenseRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 
-    @GetMapping("/expenses")
-    Collection<Expense> getExpenses() {
-        return  expenseRepository.findAll();
+    @GetMapping("/users/{login}/expenses")
+    Collection<Expense> getExpenses(@PathVariable String login) {
+        User user = userRepository.findByLogin(login);
+        return  expenseRepository.findAllByUser(user);
     }
 
     @GetMapping("expense/{id}")
