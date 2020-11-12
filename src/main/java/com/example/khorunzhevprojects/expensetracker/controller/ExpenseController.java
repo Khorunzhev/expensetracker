@@ -49,7 +49,10 @@ public class ExpenseController {
     }
 
     @PutMapping("/expense/{id}")
-    ResponseEntity<Expense> updateExpense(@Valid @RequestBody Expense expense) {
+    ResponseEntity<Expense> updateExpense(@RequestHeader("Authorization-UserName") String userName, @Valid @RequestBody Expense expense) {
+        User user = userRepository.findByLogin(userName);
+        expense.setUser(user);
+
         Expense result = expenseRepository.save(expense);
         return ResponseEntity.ok().body(result);
     }

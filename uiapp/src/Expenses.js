@@ -42,14 +42,29 @@ class Expenses extends Component {
 
         const item = this.state.item;
 
-        await fetch(`/api/expense/`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item),
-        })
+        if (item.id==="") {
+
+            await fetch(`/api/expense/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization-UserName': AuthentificationService.getLoggedInUserName(),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item),
+            })
+        }
+        else {
+            await fetch(`/api/expense/${item.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization-UserName': AuthentificationService.getLoggedInUserName(),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item),
+            })
+        }
         event.preventDefault();
         this.props.history.push("/expenses")
     }
@@ -102,13 +117,17 @@ class Expenses extends Component {
     }
 
     async modify(expense) {
+        console.log(expense);
         let modifyItem = {
             id: expense.id,
             amount: expense.amount,
             description: expense.description,
             location: expense.location,
-            category: expense.category,
-            expenseDate: new Date(),
+            category: {
+                id: expense.category.id,
+                name: expense.category.name
+            },
+            expenseDate: new Date(expense.expenseDate),
         }
         console.log(modifyItem);
         this.setState(
@@ -151,7 +170,7 @@ class Expenses extends Component {
                     <td>{exp.description}</td>
                     <td>{exp.amount}</td>
                     <td>{exp.location}</td>
-                    <td><Moment date={exp.expenseDate} format="YYYY/MM/DD"/></td>
+                    <td><Moment date={exp.expenseDate} format="DD/MM/YYYY"/></td>
                     <td>{exp.category.name}</td>
                     <td><Button size="sm" color="warning" onClick={() => this.modify(exp)}>Modify</Button></td>
                     <td><Button size="sm" color="danger" onClick={() => this.remove(exp.id)}>Delete</Button></td>
@@ -177,7 +196,7 @@ class Expenses extends Component {
 
                             <FormGroup>
                                 <Label for="category">Category</Label>
-                                <select onChange={this.handleCategoryChange} name="category" value={this.state.item.category}>
+                                <select onChange={this.handleCategoryChange} name="category" value={this.state.item.category.id}>
                                     {optionList}
                                 </select>
                             </FormGroup>
